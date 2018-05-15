@@ -10,5 +10,7 @@
 
 
 return [
+    'wp_url' => env('WP_URL', ''),
 
+    'wp_timeout' => env('WP_TIMEOUT', 10)
 ];

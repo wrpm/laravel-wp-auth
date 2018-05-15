@@ -10,7 +10,7 @@ use GuzzleHttp\Exception\RequestException;
 use Symfony\Component\HttpKernel\Exception\UnauthorizedHttpException;
 use WRPM\LaravelWPAuth\Facades\WPAuthUser;
 
-class WPAuth
+class WPAuthMiddleware
 {
     /**
      * The Guzzle Client implementation.
@@ -58,25 +58,7 @@ class WPAuth
 
         // try to authenticate with wordpress
         try {
-            $response = $this->client->request(
-                'GET',
-                'wp-json/wp/v2/users/me?context=edit',
-                [
-                    'headers' => [
-                        'Authorization' => 'Bearer ' . $token
-                    ]
-                ]
-            );
-
-            // get user from response
-            $body = $response->getBody();
-            $userData = json_decode($body, true);
-
-            // set user data for further use
-            WPAuthUser::setUser($userData);
-
-            // continue with process
-            return $next($request);
+            $response = $this->requestUserByToken($token);
         } catch (RequestException $e) {
             
             // get request
@@ -85,6 +67,9 @@ class WPAuth
 
             // get response
             $res = $e->getResponse();
+            if (!$res) {
+                return new Response('Can\'t connect to WP Server', 500);
+            }
             $status = $res->getStatusCode();
             $body = $res->getBody();
             $data = json_decode($body, true);
@@ -92,5 +77,28 @@ class WPAuth
             // return response error
             return new Response($data, $status);
         }
+
+        // get user from response
+        $body = $response->getBody();
+        $userData = json_decode($body, true);
+
+        // set user data for further use
+        WPAuthUser::setUser($userData);
+
+        // continue with process
+        return $next($request);
+    }
+
+    public function requestUserByToken($token)
+    {
+        return $this->client->request(
+            'GET',
+            'wp-json/wp/v2/users/me?context=edit',
+            [
+                'headers' => [
+                    'Authorization' => 'Bearer ' . $token
+                ]
+            ]
+        );
     }
 }
