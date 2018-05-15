@@ -9,6 +9,7 @@ use GuzzleHttp\Psr7\Request as ApiRequest;
 use GuzzleHttp\Exception\RequestException;
 use Symfony\Component\HttpKernel\Exception\UnauthorizedHttpException;
 use WRPM\LaravelWPAuth\Facades\WPAuthUser;
+use Illuminate\Support\Facades\Log;
 
 class WPAuthMiddleware
 {
@@ -68,7 +69,8 @@ class WPAuthMiddleware
             // get response
             $res = $e->getResponse();
             if (!$res) {
-                return new Response('Can\'t connect to WP Server', 500);
+                Log::error($e);
+                return new Response(['message' => 'Can\'t connect to WP Server'], 500);
             }
             $status = $res->getStatusCode();
             $body = $res->getBody();

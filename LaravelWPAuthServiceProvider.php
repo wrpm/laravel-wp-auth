@@ -11,6 +11,8 @@
 namespace WRPM\LaravelWPAuth;
 
 use Illuminate\Support\ServiceProvider;
+use Illuminate\Support\Facades\Log;
+use Illuminate\Support\Facades\Config;
 
 /**
  * LaravelWPAuthServiceProvider service provider for wrpm/laravel-wp-auth package
@@ -59,10 +61,10 @@ class LaravelWPAuthServiceProvider extends ServiceProvider
      */
     protected function registerDependencies()
     {
-        $this->app->bind('WRPM\LaravelWPAuth\Http\Middleware\WPAuth', function ($app) {
+        $this->app->bind('WRPM\LaravelWPAuth\Http\Middleware\WPAuthMiddleware', function ($app) {
             $url = Config::get('wpauth.wp_url');
             $timeout = Config::get('wpauth.wp_timeout');
-            return new \WRPM\LaravelWPAuth\Http\Middleware\WPAuth(
+            return new \WRPM\LaravelWPAuth\Http\Middleware\WPAuthMiddleware(
                 new \GuzzleHttp\Client([
                     // Base URI is used with relative requests
                     'base_uri' => $url,
