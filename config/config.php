@@ -10,6 +10,11 @@
 
 
 return [
+
+    'jwt_auth_secret_key' => env('JWT_AUTH_SECRET_KEY', ''),
+
+    'use_wp_api' => env('USE_WP_API', FALSE),
+
     'wp_url' => env('WP_URL', ''),
 
     'wp_timeout' => env('WP_TIMEOUT', 10)
