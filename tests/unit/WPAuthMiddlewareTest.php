@@ -59,7 +59,8 @@ class WPAuthMiddlewareTest extends Orchestra\Testbench\TestCase
     protected function getPackageProviders($app)
     {
         return [
-            'WRPM\LaravelWPAuth\LaravelWPAuthServiceProvider'
+            \WRPM\LaravelWPAuth\LaravelWPAuthServiceProvider::class,
+            \Clockwork\Support\Laravel\ClockworkServiceProvider::class
         ];
     }
 
@@ -198,7 +199,7 @@ class WPAuthMiddlewareTest extends Orchestra\Testbench\TestCase
 
     /**
      * @expectedException Symfony\Component\HttpKernel\Exception\UnauthorizedHttpException
-     * @expectedExceptionMessage Authorization header not found.
+     * @expectedExceptionMessage Authorization token not found.
      */
     public function testAuthFailNoHeader()
     {
@@ -212,7 +213,7 @@ class WPAuthMiddlewareTest extends Orchestra\Testbench\TestCase
 
     /**
      * @expectedException Symfony\Component\HttpKernel\Exception\UnauthorizedHttpException
-     * @expectedExceptionMessage Authorization header malformed.
+     * @expectedExceptionMessage Authorization token not found.
      */
     public function testAuthFailMalformedHeader()
     {

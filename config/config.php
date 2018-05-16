@@ -17,5 +17,7 @@ return [
 
     'wp_url' => env('WP_URL', ''),
 
-    'wp_timeout' => env('WP_TIMEOUT', 10)
+    'wp_timeout' => env('WP_TIMEOUT', 10),
+    
+    'accept_url_param_token' => env('WPAUTH_ACCEPT_URL_PARAM_TOKEN', false)
 ];

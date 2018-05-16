@@ -13,7 +13,8 @@
     "require": {
         "php": ">=5.4.0",
         "dingo/api": "1.0.*@dev",
-        "guzzlehttp/guzzle": "~6.0"
+        "guzzlehttp/guzzle": "~6.0",
+        "itsgoingd/clockwork": "^2.2"
     },
 
     "require-dev": {

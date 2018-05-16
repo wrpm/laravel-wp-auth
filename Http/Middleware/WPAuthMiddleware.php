@@ -10,6 +10,7 @@ use GuzzleHttp\Exception\RequestException;
 use Symfony\Component\HttpKernel\Exception\UnauthorizedHttpException;
 use WRPM\LaravelWPAuth\Facades\WPAuthUser;
 use Illuminate\Support\Facades\Log;
+use Illuminate\Support\Facades\Config;
 
 class WPAuthMiddleware
 {
@@ -40,21 +41,22 @@ class WPAuthMiddleware
      */
     public function handle($request, Closure $next)
     {
+        clock()->startEvent('wpauth-middleware-wrapper', "Authenticating user");
+
 
         // Look for the HTTP_AUTHORIZATION header
         $header = $request->header('Authorization', false);
-
-        if (!$header) {
-            throw new UnauthorizedHttpException('Bearer', 'Authorization header not found.');
+        $token = false;
+        if ($header) {
+            list($token) = sscanf($header, 'Bearer %s');
         }
 
-        /*
-         * The Authorization is present verify the format
-         * if the format is wrong throw exception
-         */
-        list($token) = sscanf($header, 'Bearer %s');
+        if (!$token && Config::get('wpauth.accept_url_param_token')) {
+            $token = $request->input('access_token', false);
+        }
+
         if (!$token) {
-            throw new UnauthorizedHttpException('Bearer', 'Authorization header malformed.');
+            throw new UnauthorizedHttpException('Bearer', 'Authorization token not found.');
         }
 
         // try to authenticate with wordpress
@@ -86,6 +88,8 @@ class WPAuthMiddleware
 
         // set user data for further use
         WPAuthUser::setUser($userData);
+
+        clock()->endEvent('wpauth-middleware-wrapper');
 
         // continue with process
         return $next($request);
