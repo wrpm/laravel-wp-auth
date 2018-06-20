@@ -13,6 +13,8 @@ namespace WRPM\LaravelWPAuth;
 use Illuminate\Support\ServiceProvider;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Config;
+use WRPM\LaravelWPAuth\Authenticators\WPApiAuthenticator;
+use WRPM\LaravelWPAuth\Authenticators\JWTDecodeAuthenticator;
 
 /**
  * LaravelWPAuthServiceProvider service provider for wrpm/laravel-wp-auth package
@@ -62,15 +64,29 @@ class LaravelWPAuthServiceProvider extends ServiceProvider
     protected function registerDependencies()
     {
         $this->app->bind('WRPM\LaravelWPAuth\Http\Middleware\WPAuthMiddleware', function ($app) {
-            $url = Config::get('wpauth.wp_url');
-            $timeout = Config::get('wpauth.wp_timeout');
+
+            $useWPApi = Config::get('wpauth.use_wp_api');
+
+            if ($useWPApi) {
+                $url = Config::get('wpauth.wp_url');
+                $timeout = Config::get('wpauth.wp_timeout');
+                $authenticator = new WPApiAuthenticator(
+                    new \GuzzleHttp\Client([
+                        // Base URI is used with relative requests
+                        'base_uri' => $url,
+                        // You can set any number of default request options.
+                        'timeout' => $timeout
+                    ])
+                );
+            } else {
+                $url = Config::get('wpauth.wp_url');
+                $timeout = Config::get('wpauth.wp_timeout');
+
+                $authenticator = new JWTDecodeAuthenticator();
+            }
+
             return new \WRPM\LaravelWPAuth\Http\Middleware\WPAuthMiddleware(
-                new \GuzzleHttp\Client([
-                    // Base URI is used with relative requests
-                    'base_uri' => $url,
-                    // You can set any number of default request options.
-                    'timeout' => $timeout
-                ])
+                $authenticator
             );
         });
 

@@ -14,7 +14,9 @@
         "php": ">=5.4.0",
         "dingo/api": "1.0.*@dev",
         "guzzlehttp/guzzle": "~6.0",
-        "itsgoingd/clockwork": "^2.2"
+        "itsgoingd/clockwork": "^2.2",
+        "mockery/mockery": "^1.0@dev",
+        "firebase/php-jwt": "dev-master"
     },
 
     "require-dev": {
