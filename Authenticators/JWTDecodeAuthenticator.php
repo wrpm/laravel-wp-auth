@@ -16,6 +16,8 @@ use Symfony\Component\HttpKernel\Exception\UnauthorizedHttpException;
 use WRPM\LaravelWPAuth\Facades\WPAuthUser;
 use Firebase\JWT\JWT;
 use Illuminate\Support\Facades\Config;
+use Illuminate\Support\Facades\Log;
+
 
 
 

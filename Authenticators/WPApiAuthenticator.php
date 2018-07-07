@@ -17,6 +17,8 @@ use GuzzleHttp\Psr7\Request as ApiRequest;
 use GuzzleHttp\Exception\RequestException;
 use Symfony\Component\HttpKernel\Exception\UnauthorizedHttpException;
 use WRPM\LaravelWPAuth\Facades\WPAuthUser;
+use Illuminate\Support\Facades\Log;
+
 
 /**
  * WPApi authenticator for wrpm/laravel-wp-auth package

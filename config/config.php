@@ -13,6 +13,8 @@ return [
 
     'jwt_auth_secret_key' => env('JWT_AUTH_SECRET_KEY', ''),
 
+    'jwt_issuer' => env('JWT_AUTH_ISSUER', ''),
+
     'use_wp_api' => env('USE_WP_API', FALSE),
 
     'wp_url' => env('WP_URL', ''),

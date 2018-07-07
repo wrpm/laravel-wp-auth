@@ -28,7 +28,5 @@
         "psr-4": {
             "WRPM\\LaravelWPAuth\\": ""
         }
-    },
-
-    "minimum-stability": "dev"
+    }
 }
