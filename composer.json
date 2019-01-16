@@ -15,7 +15,7 @@
         "dingo/api": "1.0.*@dev",
         "guzzlehttp/guzzle": "~6.0",
         "itsgoingd/clockwork": "^2.2",
-        "firebase/php-jwt": "dev-master"
+        "firebase/php-jwt": "~5.0"
     },
 
     "require-dev": {
